@@ -64299,7 +64299,7 @@ THREE.OBJLoader = ( function () {
 					// This should be detected and a dummy material created (later MultiMaterial and geometry groups).
 					// This requires some care to not create extra material on each smooth value for "normal" obj files.
 					// where explicit usemtl defines geometry groups.
-					// Example asset: examples/models/obj/cerberus/Cerberus.obj
+					// Example asset: examples/hand-tracking-keyboard/modelsobj/cerberus/Cerberus.obj
 
 					/*
 					 * http://paulbourke.net/dataformats/obj/
@@ -80346,7 +80346,7 @@ Component.prototype = {
       /**
        * To avoid bogus double parsings. Cached values will be parsed when building
        * component data. For instance when parsing a src id to its url, we want to cache
-       * original string and not the parsed one (#monster -> models/monster.dae)
+       * original string and not the parsed one (#monster -> hand-tracking-keyboard/modelsmonster.dae)
        * so when building data we parse the expected value.
        */
       if (typeof parsedValue === 'string') { parsedValue = value; }

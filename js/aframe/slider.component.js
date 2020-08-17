@@ -40,7 +40,7 @@ AFRAME.registerComponent('slider', {
 
         this.setValue(this.data.value);
 
-        const knobURL = "/models/knob.glb";
+        const knobURL = "/hand-tracking-keyboard/modelsknob.glb";
         loader.load( knobURL,(gltf) => {
             var scene = gltf.scene;
             this.knob = scene.children[0];

@@ -9,7 +9,7 @@ AFRAME.registerComponent('hand-tracking-mesh', {
 
     init: function() {
         this.createMesh = this.createMesh.bind(this);
-        this.modelUrl = this.data.hand === 'right' ? '/models/r_hand.glb' : '/models/l_hand.glb' ;
+        this.modelUrl = this.data.hand === 'right' ? '/hand-tracking-keyboard/modelsr_hand.glb' : '/hand-tracking-keyboard/modelsl_hand.glb' ;
 
         const prefix = this.data.hand === 'right' ? 'b_r_' : 'b_l_'
         this.mapping = [];
