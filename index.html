@@ -3,98 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hand tracking keyboard</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Hand Tracking in A-Frame</title>
+    <script src="js/aframe-master.js"></script>
+    <script src="js/aframe/hand-tracking-mesh.js"></script>
+    <script src="js/aframe/hand-tracking-gestures-mesh.js"></script>
+    <script src="js/aframe/slider.component.js"></script>
+    <script src="js/aframe/toggle.component.js"></script>
 </head>
 <body>
-    <main>
-        <div class="title">
-            <h1>
-                WebXR - Hand Tracking Examples 👐
-                <a class="github-button" href="https://github.com/marlon360/webxr-handtracking" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star marlon360/webxr-handtracking on GitHub">Star</a>
-                <a class="github-button" href="https://github.com/sponsors/marlon360" data-icon="octicon-heart" data-size="large" aria-label="Sponsor @marlon360 on GitHub">Sponsor</a>
-            </h1>
-            <h4>by Marlon Lückert (<a href="https://marlon-lueckert.de">https://marlon-lueckert.de</a>)</h4>
-        </div>
+    <a-scene webxr="optionalFeatures: hand-tracking">
 
-        <h2>How to run? 🔧</h2>
-        <ol>
-            <li>Use a supported device (e.g. Oculus Quest)</li>
-            <li>Enable the experimental feature in the browser (Oculus Browser 11)</li>
-            <ol>
-                <li>Visit <a href="chrome://flags/">chrome://flags/</a></li>
-                <li>Enable <em>WebXR experiences with joints tracking (#webxr-hands)</em></li>
-            </ol>
-            <li>Enable "Auto Enable Hands or Controllers" (Quest Settings (Gear Icon) -> Device -> Hands and Controllers)</li>
-            <li>Open an example from below</li>
-            <li>Enter the VR experience</li>
-            <ol>
-                <li>If you have <em>WebXR experiences with hands tracking (#webxr-hands-tracking)</em> enabled, you can start the VR experience with your hands</li>
-                <li>If you have <em>WebXR experiences with hands tracking (#webxr-hands-tracking)</em> disabled, use your controllers (not your hand) to enter the VR experience after that put the controllers down</li>
-            </ol>
-            <li>Enjoy ☺️</li>
-        </ol>
+        <a-plane position="0 0 -3" rotation="-90 0 0" width="6" height="6" color="#7BC8A4"></a-plane>
 
-        <div class="example">
-            <h2>Basic Example</h2>
-            <ul>
-                <li>visualize hands</li>
-                <li>grab object by pinching with thumb and index finger</li>
-            </ul>
-            <a href="basic.html">Open Example</a>
-            <a class="video" target="_blank" href="https://twitter.com/Marlon360/status/1285914208429842433?s=20">Show Video</a>
-        </div>
-        
-        <div class="example">
-            <h2>Improved Hand Mesh Example</h2>
-            <ul>
-                <li>hand mesh similar to the leap motion model</li>
-            </ul>
-            <a href="hand-model-leap-motion.html">Open Example</a>
-            <a class="video" target="_blank" href="https://twitter.com/Marlon360/status/1286446817366990848?s=20">Show Video</a>
-        </div>
-       
-        <div class="example">
-            <h2>A-Frame Integration</h2>
-            <ul>
-                <li>A-Frame framework integration</li>
-                <li>slider interaction</li>
-                <li>toggle interaction</li>
-            </ul>
-            <a href="aframe.html">Open Example</a>
-            <a class="video" target="_blank" href="https://twitter.com/Marlon360/status/1286821414683717632?s=20">Show Video</a>
-        </div>
-        
-        <div class="example">
-            <h2>A-Frame Physics Test</h2>
-            <ul>
-                <li>A-Frame physics system</li>
-            </ul>
-            <a href="aframe-physics.html">Open Example</a>
-            <a class="video" target="_blank" href="https://twitter.com/Marlon360/status/1287146189574545410?s=20">Show Video</a>
-        </div>
-        
-        <div class="example">
-            <h2>A-Frame Hand Mesh</h2>
-            <ul>
-                <li>skinned mesh hand model</li>
-                <li>ui slider elements to change color</li>
-                <li>ui toggle to change wireframe mode</li>
-            </ul>
-            <a href="aframe-hand-mesh.html">Open Example</a>
-            <a class="video" target="_blank" href="https://twitter.com/Marlon360/status/1287488821400133634?s=20">Show Video</a>
-        </div>
+        <a-entity id="red-slider" position="-0.4 1.1 -0.6" rotation="0 0 90" slider="min: 0; max: 255; value: 220;color: #EF2D5E"></a-entity>
+        <a-entity id="green-slider" position="-0.2 1.1 -0.6" rotation="0 0 90" slider="min: 0; max: 255; value: 180;color: #329D45"></a-entity>
+        <a-entity id="blue-slider" position="0 1.1 -0.6" rotation="0 0 90" slider="min: 0; max: 255; value: 50;color: #3263DD"></a-entity>
 
-        <div class="example">
-            <h2>A-Frame Networked Hand Tracking</h2>
-            <ul>
-                <li>multi user room</li>
-                <li>synchronize hands over the network</li>
-            </ul>
-            <a href="https://webxr-networked-handtracking.glitch.me/">Open Example</a>
-        </div>
+        <a-sphere position="0.3 1.2 -0.6" radius="0.1"></a-sphere>
+        <a-entity id="toggle" position="0.2 0.9 -0.6" rotation="0 0 0" toggle="active: false"></a-entity>
 
-    </main>
+        <a-entity class="hand" hand-tracking-mesh="hand: left" hand-tracking-gestures-mesh></a-entity>
+        <a-entity class="hand" hand-tracking-mesh="hand: right" hand-tracking-gestures-mesh></a-entity>
+
+        <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
 </body>
-<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script>
+    
+    let red = 220;
+    let green = 180;
+    let blue = 50;
+
+    const sphere = document.querySelector("a-sphere");
+
+    const redSlider = document.querySelector("#red-slider");
+    redSlider.addEventListener('change', (evt) => {
+        var newvalue = Math.round( evt.detail.value);
+        red = newvalue
+        updateColor();
+    });
+    const greenSlider = document.querySelector("#green-slider");
+    greenSlider.addEventListener('change', (evt) => {
+        var newvalue = Math.round( evt.detail.value);
+        green = newvalue
+        updateColor();
+    });
+    const blueSlider = document.querySelector("#blue-slider");
+    blueSlider.addEventListener('change', (evt) => {
+        var newvalue = Math.round( evt.detail.value);
+        blue = newvalue
+        updateColor();
+    });
+
+    const toggle = document.querySelector("#toggle");
+    toggle.addEventListener('change', (evt) => {
+        sphere.setAttribute("wireframe", evt.detail.active)
+    });
+
+
+    function updateColor() {
+        sphere.setAttribute("color", `#${decimalToHex(red) + decimalToHex(green) + decimalToHex(blue)}`);
+    }
+
+    updateColor();
+
+    function decimalToHex(d, padding = 2) {
+        var hex = Number(d).toString(16);
+
+        while (hex.length < padding) {
+            hex = "0" + hex;
+        }
+
+        return hex;
+    }
+
+
+</script>
 </html>
