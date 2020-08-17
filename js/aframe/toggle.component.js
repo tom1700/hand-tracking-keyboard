@@ -41,7 +41,7 @@ AFRAME.registerComponent('toggle', {
     
         this.controllers = Array.prototype.slice.call(document.querySelectorAll('.hand'));
 
-        const knobURL = "/hand-tracking-keyboard/modelsknob.glb";
+        const knobURL = "/hand-tracking-keyboard/models/knob.glb";
         loader.load( knobURL,(gltf) => {
             var scene = gltf.scene;
             this.knob = scene.children[0];
