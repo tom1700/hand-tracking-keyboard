@@ -30,3 +30,9 @@ function throttle(func, wait, options) {
     return result;
   };
 }
+
+const compose = (...fns) =>
+  fns.reduceRight(
+    (prevFn, nextFn) => (...args) => nextFn(prevFn(...args)),
+    (value) => value
+  );
