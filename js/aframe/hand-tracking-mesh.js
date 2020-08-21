@@ -1,4 +1,6 @@
 AFRAME.registerComponent("hand-tracking-mesh", {
+  // I assume we're either local or on a gh page
+  isLocal: window.location.hostname === "localhost",
   schema: {
     color: { default: "white", type: "color" },
     segmentSizeMultiplier: { default: 0.9, type: "number" },
@@ -8,8 +10,9 @@ AFRAME.registerComponent("hand-tracking-mesh", {
 
   init: function () {
     this.createMesh = this.createMesh.bind(this);
-    this.modelUrl =
-      this.data.hand === "right" ? "/models/r_hand.glb" : "/models/l_hand.glb";
+    this.modelUrl = `${this.isLocal ? "" : "/hand-tracking-keyboard"}/models/${
+      this.data.hand === "right" ? "/r_hand.glb" : "/l_hand.glb"
+    }`;
 
     const prefix = this.data.hand === "right" ? "b_r_" : "b_l_";
     this.mapping = [];

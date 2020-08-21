@@ -17,15 +17,28 @@ AFRAME.registerComponent("screen", {
     this.updateScreen(key);
   },
 
+  getNewValue(key) {
+    const currentValue = this.el
+      .getAttribute("text", "value")
+      .value.slice(0, -1);
+
+    if (key === "bspc") {
+      return currentValue.slice(0, -1) + "|";
+    }
+
+    if (key === "enter") {
+      return currentValue + "\n" + "|";
+    }
+
+    return currentValue + key + "|";
+  },
+
   updateScreen(key) {
     if (!key) {
       return;
     }
-    const currentValue = this.el
-      .getAttribute("text", "value")
-      .value.slice(0, -1);
-    const newValue =
-      (key === "bspc" ? currentValue.slice(0, -1) : currentValue + key) + "|";
+
+    const newValue = this.getNewValue(key);
 
     this.el.setAttribute("text", "value", newValue);
   },

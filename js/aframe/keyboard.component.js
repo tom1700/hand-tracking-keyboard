@@ -1,4 +1,4 @@
-const KEY_CHOOSE_DELAY = 50;
+const KEY_CHOOSE_DELAY = 100;
 
 AFRAME.registerComponent("keyboard", {
   handsMostComplexState: {

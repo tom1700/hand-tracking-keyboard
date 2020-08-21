@@ -1,3 +1,6 @@
+const MAX_TIP_DISTANCE = 0.015;
+const MAX_PHALANCE_DISTANCE = 0.02;
+
 AFRAME.registerComponent("hand-tracking-gestures-mesh", {
   dependencies: ["hand-tracking-mesh"],
 
@@ -49,7 +52,7 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
     const thumbTip = joints[XRHand.THUMB_PHALANX_TIP];
     const fingerTip = joints[fingerId];
     const distance = fingerTip.position.distanceTo(thumbTip.position);
-    return distance < 0.015;
+    return distance < MAX_TIP_DISTANCE;
   },
 
   // It's tough to connect few tips at the same time, so I'm checking the touching neighbours
@@ -119,6 +122,6 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
     const finger1Distal = joints[finger1];
     const finger2Distal = joints[finger2];
     const distance = finger1Distal.position.distanceTo(finger2Distal.position);
-    return distance < 0.015;
+    return distance < MAX_PHALANCE_DISTANCE;
   },
 });
