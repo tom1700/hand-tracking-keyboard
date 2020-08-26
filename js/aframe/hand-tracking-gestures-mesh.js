@@ -14,8 +14,8 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
         (arr) => arr.join(""),
         Object.values,
         (directTouchCheckResult) =>
-          this.neighbourFingersTouchCheck(directTouchCheckResult),
-        () => this.directFingersTouchCheck()
+          this.getAllNeighbourFingersTouchStatus(directTouchCheckResult),
+        () => this.getAllFingersDirectTouchStatus()
       )();
 
       const state = {
@@ -27,15 +27,17 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
     }
   },
 
-  directFingersTouchCheck() {
-    const isIndexTouching = this.directFingerTouchCheck(
+  getAllFingersDirectTouchStatus() {
+    const isIndexTouching = this.doesFingersTouchDirectly(
       XRHand.INDEX_PHALANX_TIP
     );
-    const isMiddleTouching = this.directFingerTouchCheck(
+    const isMiddleTouching = this.doesFingersTouchDirectly(
       XRHand.MIDDLE_PHALANX_TIP
     );
-    const isRingTouching = this.directFingerTouchCheck(XRHand.RING_PHALANX_TIP);
-    const isLittleTouching = this.directFingerTouchCheck(
+    const isRingTouching = this.doesFingersTouchDirectly(
+      XRHand.RING_PHALANX_TIP
+    );
+    const isLittleTouching = this.doesFingersTouchDirectly(
       XRHand.LITTLE_PHALANX_TIP
     );
 
@@ -47,19 +49,23 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
     };
   },
 
-  directFingerTouchCheck(fingerId) {
+  getFingersDirectDistance(fingerId) {
     const joints = this.handTracking.getJoints();
     const thumbTip = joints[XRHand.THUMB_PHALANX_TIP];
     const fingerTip = joints[fingerId];
-    const distance = fingerTip.position.distanceTo(thumbTip.position);
+    return fingerTip.position.distanceTo(thumbTip.position);
+  },
+
+  doesFingersTouchDirectly(fingerId) {
+    const distance = this.getFingersDirectDistance(fingerId);
     return distance < MAX_TIP_DISTANCE;
   },
 
   // It's tough to connect few tips at the same time, so I'm checking the touching neighbours
-  neighbourFingersTouchCheck(directTouchCheckResult) {
+  getAllNeighbourFingersTouchStatus(directTouchCheckResult) {
     if (directTouchCheckResult[1]) {
       if (
-        this.neighbourFingerTouchCheck(
+        this.doesNeighbourFingersTouch(
           XRHand.INDEX_PHALANX_DISTAL,
           XRHand.MIDDLE_PHALANX_DISTAL
         )
@@ -69,7 +75,7 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
     }
     if (directTouchCheckResult[2]) {
       if (
-        this.neighbourFingerTouchCheck(
+        this.doesNeighbourFingersTouch(
           XRHand.INDEX_PHALANX_DISTAL,
           XRHand.MIDDLE_PHALANX_DISTAL
         )
@@ -77,7 +83,7 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
         directTouchCheckResult[1] = 1;
       }
       if (
-        this.neighbourFingerTouchCheck(
+        this.doesNeighbourFingersTouch(
           XRHand.MIDDLE_PHALANX_DISTAL,
           XRHand.RING_PHALANX_DISTAL
         )
@@ -87,7 +93,7 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
     }
     if (directTouchCheckResult[3]) {
       if (
-        this.neighbourFingerTouchCheck(
+        this.doesNeighbourFingersTouch(
           XRHand.MIDDLE_PHALANX_DISTAL,
           XRHand.RING_PHALANX_DISTAL
         )
@@ -95,7 +101,7 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
         directTouchCheckResult[2] = 1;
       }
       if (
-        this.neighbourFingerTouchCheck(
+        this.doesNeighbourFingersTouch(
           XRHand.RING_PHALANX_DISTAL,
           XRHand.LITTLE_PHALANX_DISTAL
         )
@@ -105,7 +111,7 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
     }
     if (directTouchCheckResult[4]) {
       if (
-        this.neighbourFingerTouchCheck(
+        this.doesNeighbourFingersTouch(
           XRHand.RING_PHALANX_DISTAL,
           XRHand.LITTLE_PHALANX_DISTAL
         )
@@ -117,11 +123,15 @@ AFRAME.registerComponent("hand-tracking-gestures-mesh", {
     return directTouchCheckResult;
   },
 
-  neighbourFingerTouchCheck(finger1, finger2) {
+  getNeighbourFingersDistance(finger1, finger2) {
     const joints = this.handTracking.getJoints();
     const finger1Distal = joints[finger1];
     const finger2Distal = joints[finger2];
-    const distance = finger1Distal.position.distanceTo(finger2Distal.position);
+    return finger1Distal.position.distanceTo(finger2Distal.position);
+  },
+
+  doesNeighbourFingersTouch(finger1, finger2) {
+    const distance = this.getNeighbourFingersDistance(finger1, finger2);
     return distance < MAX_PHALANCE_DISTANCE;
   },
 });

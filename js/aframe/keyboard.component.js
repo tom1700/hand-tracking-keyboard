@@ -1,4 +1,4 @@
-const KEY_CHOOSE_DELAY = 100;
+const KEY_CHOOSE_DELAY = 70;
 
 AFRAME.registerComponent("keyboard", {
   handsMostComplexState: {
@@ -11,11 +11,11 @@ AFRAME.registerComponent("keyboard", {
     right: false,
   },
 
+  shouldWait: false,
+
   isPressing() {
     return this.pressingState.left || this.pressingState.right;
   },
-
-  isChoosingState: false,
 
   init() {
     this.controllers = Array.from(document.querySelectorAll(".hand"));
@@ -45,24 +45,25 @@ AFRAME.registerComponent("keyboard", {
     const wasPressing = this.isPressing();
     this.pressingState[hand] = fingersState !== "0000";
 
-    if (fingersState === this.handsMostComplexState[hand]) {
+    if (fingersState === this.handsMostComplexState[hand] || this.shouldWait) {
       // No update: ignore
       return;
     }
 
-    // Touch started
-    if (!wasPressing && this.isPressing()) {
-      this.isChoosingState = true;
-      // We always want to use the most complex state that user performs in the next KEY_CHOOSE_DELAY ms.
+    // Touch ended
+    if (wasPressing && !this.isPressing()) {
+      this.emitKeyAndResetState();
+      this.shouldWait = true;
       setTimeout(() => {
-        this.emitKeyAndResetState();
+        this.shouldWait = false;
       }, KEY_CHOOSE_DELAY);
-      this.updateHandsMostComplexState(hand, fingersState);
       return;
     }
 
-    if (this.isPressing() && this.isChoosingState) {
+    // Touch in progress
+    if (this.isPressing()) {
       this.updateHandsMostComplexState(hand, fingersState);
+      return;
     }
   },
 
@@ -95,7 +96,6 @@ AFRAME.registerComponent("keyboard", {
       left: "0000",
       right: "0000",
     };
-    this.isChoosingState = false;
   },
 
   keyMap: { ...KEY_MAP },
